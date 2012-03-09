@@ -34,7 +34,7 @@ class CsvGriffonPlugin {
             email: 'aalmiray@yahoo.com'
         ]
     ]
-    String title = 'CSV support'
+    String title = 'CSV parsing support'
 
     String description = '''
 A port of [Grails CSV Plugin][1] to Griffon. Original (c) Les Hazlewood
@@ -94,7 +94,4 @@ The supported config options:
 [1]: http://grails.org/plugin/csv 
 [2]: http://opencsv.sourceforge.net
 '''
-
-    // URL to the plugin's documentation
-    def documentation = 'http://griffon.codehaus.org/Csv+Plugin'
 }
