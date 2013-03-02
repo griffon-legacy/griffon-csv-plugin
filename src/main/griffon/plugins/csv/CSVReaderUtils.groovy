@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Les Hazlewood
+ * Copyright 2010-2013 Les Hazlewood
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,10 +14,13 @@
  * limitations under the License.
  * under the License.
  */
+
 package griffon.plugins.csv
 
 import au.com.bytecode.opencsv.CSVParser
 import au.com.bytecode.opencsv.CSVReader
+
+import java.nio.charset.Charset
 
 /**
  * Utility class for adding CSV parsing capability to core Java/Groovy classes (String, File, InputStream, Reader).
@@ -26,8 +29,7 @@ import au.com.bytecode.opencsv.CSVReader
  * @author Les Hazlewood
  */
 class CSVReaderUtils {
-
-    public static void eachLine(CSVReader csvReader, Closure c) {
+    static void eachLineCsv(CSVReader csvReader, Closure c) {
         try {
             String[] tokens = csvReader.readNext()
             while (tokens) {
@@ -39,28 +41,28 @@ class CSVReaderUtils {
         }
     }
 
-    public static void eachLine(File file, Closure c) {
-        eachLine(toCsvReader(file, null), c);
+    static void eachLineCsv(File file, Closure c) {
+        eachLineCsv(toCsvReader(file, null), c);
     }
 
-    public static void eachLine(InputStream is, Closure c) {
-        eachLine(toCsvReader(is, null), c);
+    static void eachLineCsv(InputStream is, Closure c) {
+        eachLineCsv(toCsvReader(is, null), c);
     }
 
-    public static void eachLine(Reader r, Closure c) {
-        eachLine(toCsvReader(r, null), c);
+    static void eachLineCsv(Reader r, Closure c) {
+        eachLineCsv(toCsvReader(r, null), c);
     }
 
-    public static void eachLine(String csv, Closure c) {
-        eachLine(toCsvReader(csv, null), c);
+    static void eachLineCsv(String csv, Closure c) {
+        eachLineCsv(toCsvReader(csv, null), c);
     }
 
-    public static CSVReader toCsvReader(File file, def settingsMap) {
+    static CSVReader toCsvReader(File file, Map settingsMap) {
         return toCsvReader(new FileReader(file), settingsMap)
     }
 
-    public static CSVReader toCsvReader(InputStream is, def settingsMap) {
-        def charset = settingsMap?.get('charset')
+    static CSVReader toCsvReader(InputStream is, Map settingsMap) {
+        Charset charset = settingsMap?.get('charset') as Charset
         InputStreamReader reader;
         if (charset) {
             reader = new InputStreamReader(is, charset)
@@ -70,8 +72,7 @@ class CSVReaderUtils {
         return toCsvReader(reader, settingsMap);
     }
 
-    public static CSVReader toCsvReader(Reader r, def settingsMap) {
-
+    static CSVReader toCsvReader(Reader r, Map settingsMap) {
         char separatorChar = (settingsMap?.get('separatorChar') ?: CSVParser.DEFAULT_SEPARATOR) as char
         char quoteChar = (settingsMap?.get('quoteChar') ?: CSVParser.DEFAULT_QUOTE_CHARACTER) as char
         char escapeChar = (settingsMap?.get('escapeChar') ?: CSVParser.DEFAULT_ESCAPE_CHARACTER) as char
@@ -92,7 +93,7 @@ class CSVReaderUtils {
         return new CSVReader(r, separatorChar, quoteChar, escapeChar, skipLines, strictQuotes, ignoreLeadingWhiteSpace)
     }
 
-    public static CSVReader toCsvReader(String s, def settingsMap) {
+    static CSVReader toCsvReader(String s, Map settingsMap) {
         return toCsvReader(new StringReader(s), settingsMap)
     }
 }
